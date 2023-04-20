@@ -1,86 +1,83 @@
-// -----------------------------------------------------------------------------
-// Codam Coding College, Amsterdam @ 2022-2023 by W2Wizard.
-// See README in the root project for more information.
-// -----------------------------------------------------------------------------
+#include "fractol.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include "MLX42/include/MLX42/MLX42.h"
+static mlx_image_t	*g_img;
+int iter = 180;
+double	k = 1;
 
-#define WIDTH 512
-#define HEIGHT 512
-
-static mlx_image_t* image;
-
-// -----------------------------------------------------------------------------
-
-int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
+int get_rgb(int r, int g, int b)
 {
-    return (r << 24 | g << 16 | b << 8 | a);
+    return (r << 24 | g << 16 | b << 8 | 0xFF);
 }
 
-void ft_randomize(void* param)
+complex_t count(complex_t z1, complex_t z2)
 {
-	for (int32_t i = 0; i < image->width; ++i)
-	{
-		for (int32_t y = 0; y < image->height; ++y)
-		{
-			uint32_t color = ft_pixel(
-				rand() % 0xFF, // R
-				rand() % 0xFF, // G
-				rand() % 0xFF, // B
-				rand() % 0xFF  // A
-			);
-			mlx_put_pixel(image, i, y, color);
-		}
-	}
+    return (comp_sum(comp_mul(z1, z1), z2));
 }
 
-void ft_hook(void* param)
+bool check(complex_t z1)
 {
-	mlx_t* mlx = param;
-
-	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx);
-	if (mlx_is_key_down(mlx, MLX_KEY_UP))
-		image->instances[0].y -= 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
-		image->instances[0].y += 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
-		image->instances[0].x -= 5;
-	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
-		image->instances[0].x += 5;
+    if (sqrt(pow(z1.real, 2) + pow(z1.imag, 2)) > 2)
+        return (0);
+    return (1);
 }
 
-// -----------------------------------------------------------------------------
+void	image(double k)
+{	
+    complex_t z1;
+    complex_t z2;
 
-int32_t main(int32_t argc, const char* argv[])
+	for (double x = 0; x < g_img->width; x++)
+   	{
+		double y = 0;
+		for(double y = 0; y < g_img->height; y++)
+       	{
+			double t = 0;
+			z1.real = (4 / ((double) WIDTH) * x - 2.5) / k;
+			z1.imag = (4 / ((double) WIDTH) * y - 2 * ((double)HEIGHT) / ((double)WIDTH)) / k;
+           	z2 = z1;
+           	for (int j = 0; j < iter; j++)
+           	{
+				t = j;
+               	z1 = count(z1, z2);
+				if (!check(z1))
+                   	break;
+           	}
+           	if (check(z1))
+		    	mlx_put_pixel(g_img, x, y, get_rgb(0, 0, 0));
+           	else
+               	mlx_put_pixel(g_img, x, y, (int)(t / iter * 0xFFFFFFFF) % 0xFFFFFF00 + 0x000000FF);
+       	}
+   	}
+}
+
+void	hook(void* param)
 {
 	mlx_t* mlx;
+	mlx = param;
 
-	// Gotta error check this stuff
-	if (!(mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true)))
+	if (mlx_is_key_down(mlx, MLX_KEY_UP))
 	{
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
+		k *= 1.3;
+		image(k);
 	}
-	if (!(image = mlx_new_image(mlx, 128, 128)))
+	if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
 	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
+		k /= 1.3;
+		image(k);
 	}
-	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
-	{
-		mlx_close_window(mlx);
-		puts(mlx_strerror(mlx_errno));
-		return(EXIT_FAILURE);
-	}
-	
-	mlx_loop_hook(mlx, ft_randomize, mlx);
-	mlx_loop_hook(mlx, ft_hook, mlx);
+}
 
+int32_t	main(void)
+{
+	mlx_t*    mlx;
+
+	mlx = mlx_init(WIDTH, HEIGHT, "FRACTOL", true);
+	if (!mlx)
+		exit(EXIT_FAILURE);
+	g_img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	mlx_image_to_window(mlx, g_img, 0, 0);
+	image(k);
+	mlx_loop_hook(mlx, &hook, mlx);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (EXIT_SUCCESS);

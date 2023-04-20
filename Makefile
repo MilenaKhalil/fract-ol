@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 # something I've used for running!
-# gcc main2.c MLX42/libmlx42.a -o fractol -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./fractol
+# gcc -Ofast main4.c MLX42/libmlx42.a -o fractol -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./fractol
 
 SRC = main2.c
 
