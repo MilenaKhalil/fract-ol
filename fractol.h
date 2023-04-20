@@ -7,6 +7,16 @@
 #define WIDTH 2000
 #define HEIGHT 512
 
+typedef struct s_info
+{
+    mlx_t       *mlx;
+    mlx_image_t *image;
+    int         width;
+    int         height;
+    double      xpos;
+    double      ypos;
+}   t_info;
+
 typedef struct Complex 
 {
     double real;

@@ -13,7 +13,8 @@
 # something I've used for running!
 # gcc -Ofast main4.c MLX42/libmlx42.a -o fractol -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./fractol
 
-SRC = main2.c
+SRC =	main.c \
+		complex.c
 
 MLX = MLX42/libmlx42.a
 
@@ -21,16 +22,18 @@ LIBFT = ./libft/libft.a
 
 OBJ = $(SRC:.c=.o)
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -Ofast
 
-NAME = fractol.a
+NAME = fractol
+
+INCLUDE = -I ./
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(MAKE) -C libft
 	cp $(LIBFT) $(NAME)
-	ar -rc $(NAME) $(OBJ)
+	gcc -Ofast $(OBJ) MLX42/libmlx42.a -o fractol -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

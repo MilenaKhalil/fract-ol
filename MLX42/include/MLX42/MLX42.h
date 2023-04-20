@@ -6,7 +6,7 @@
 /*   By: W2Wizard <w2.wizzard@gmail.com>              +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/28 00:33:01 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2022/08/10 13:00:48 by lde-la-h      ########   odam.nl         */
+/*   Updated: 2023/04/20 14:35:41 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -661,7 +661,7 @@ mlx_image_t* mlx_new_image(mlx_t* mlx, uint32_t width, uint32_t height);
  * @param[in] y The Y position.
  * @return Index to the instance, or -1 on failure.
  */
-int32_t mlx_image_to_window(mlx_t* mlx, mlx_image_t* img, int32_t x, int32_t y);
+int32_t mlx_image_to_window(mlx_t *mlx, mlx_image_t *img, int32_t x, int32_t y);
 
 /**
  * Deleting an image will remove it from the render queue as well as any and all
