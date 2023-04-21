@@ -26,13 +26,16 @@ void	image(double k, mlx_image_t *img, double xpos, double ypos)
 	complex_t	z2;
 	char		col_iter;
 
+ypos = 0;
+//xpos = 0;
 	for (double x = 0; x < img->width; x++)
 	{
 		for(double y = 0; y < img->height; y++)
 		{
 			double t = 0;
-			z1.real = (4 / ((double)img->width) * (x + xpos) - 2.5) / k;
-			z1.imag = (4 / ((double)img->width) * (y + ypos) - 2 * ((double)img->height) / ((double)img->width)) / k;
+			z1.real = (4 / ((double)img->width) * (x) - 2.5) / k + (4 / ((double)img->width) * (xpos) + 2.5) / k;
+			//printf("number xpos = %f\n", (4 / ((double)img->width) * (100)) / k);
+			z1.imag = (4 / ((double)img->width) * (y - ypos) - 2 * ((double)img->height) / ((double)img->width)) / k;
 			z2 = z1;
 			for (int j = 0; j < iter; j++)
 			{
@@ -48,6 +51,8 @@ void	image(double k, mlx_image_t *img, double xpos, double ypos)
 				col_iter = (int)(sin(t / iter * M_PI) * 0xFF);
 				mlx_put_pixel(img, x, y, get_rgb(col_iter / 2, (int)(col_iter / ((sin(t) + 1))) & 0xFF, col_iter)); //(int)(t / iter * 0xFF) | (0xFF000000 & 0x000000FF));
 			}
+			if (z1.real == 0 && z1.imag == 0)
+				mlx_put_pixel(img, x, y, get_rgb(0xFF, 0xFF, 0xFF));
 		}
 	}
 }
@@ -74,12 +79,15 @@ void	hook(void *param)
 		mlx_resize_image(info->image, info->width, info->height);
 		image(k, info->image, info->xpos, info->ypos);
 	}
+	if (mlx_is_mouse_down(((t_info*)info)->mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		k *= 1.3;
+		image(k, ((t_info*) info)->image, info->xpos, info->ypos);
+	}
 }
 
 void	func(double xdelta, double ydelta, void *info)
 {
-	//(void) param;
-	// Simple up or down detection.
 	(void) xdelta;
 	if (ydelta > 0)
 	{
@@ -95,19 +103,11 @@ void	func(double xdelta, double ydelta, void *info)
 
 void	func_m(double xpos, double ypos, void *info)
 {
-	// printf("ypos = %lf\n", ypos);
-	// printf("xpos = %lf\n", xpos);
-	((t_info*) info)->xpos = xpos;
-	((t_info*) info)->ypos = ypos;
-	image(k, ((t_info*) info)->image, xpos, ypos);
-	//if (ypos > 0)
-	//{
-		//puts(ypos);
-	//}
-	// if (xpos < 0)
-	// 	puts("Sliiiide to the left!");
-	// else if (xpos > 0)
-	// 	puts("Sliiiide to the right!");
+	if ((xpos != ((t_info*) info)->xpos) || (ypos != ((t_info*) info)->ypos))
+	{
+		((t_info*) info)->xpos = xpos;
+		((t_info*) info)->ypos = ypos;
+	}
 }
 
 int32_t	main(void)

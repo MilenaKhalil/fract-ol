@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <memory.h>
 #include <math.h>
-#define WIDTH 2000
+#define WIDTH 512
 #define HEIGHT 512
 
 typedef struct s_info
