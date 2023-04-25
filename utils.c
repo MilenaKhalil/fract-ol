@@ -1,43 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   complex.c                                          :+:    :+:            */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/22 23:09:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/04/25 22:51:07 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/04/25 22:59:37 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-t_complex	comp_sum(t_complex z1, t_complex z2)
+int	get_rgb(char r, char g, char b)
 {
-	t_complex	z3;
-
-	z3.real = z1.real + z2.real;
-	z3.imag = z1.imag + z2.imag;
-	return (z3);
+	return (r << 24 | g << 16 | b << 8 | 0xFF);
 }
 
-t_complex	comp_mul(t_complex z1, t_complex z2)
+double	absolut(double num)
 {
-	t_complex	z3;
-
-	z3.real = z1.real * z2.real - z1.imag * z2.imag;
-	z3.imag = z1.real * z2.imag + z1.imag * z2.real;
-	return (z3);
+	if (num > 0)
+		return (num);
+	else
+		return (num * -1);
 }
 
-t_complex	count(t_complex z1, t_complex z2)
+void	new_info(t_info *info, mlx_t *mlx, mlx_image_t *img, char id)
 {
-	return (comp_sum(comp_mul(z1, z1), z2));
-}
-
-bool	check(t_complex z1)
-{
-	if (sqrt(pow(z1.real, 2) + pow(z1.imag, 2)) > 3)
-		return (0);
-	return (1);
+	info->mlx = mlx;
+	info->image = img;
+	info->width = (double)WIDTH;
+	info->height = (double)HEIGHT;
+	info->k = 1;
+	info->xpos = (2.5 / 4) * WIDTH;
+	info->xx = 0;
+	info->yy = 2 * (info->height) / (info->width);
+	info->fractal = id;
+    info->iter = ITER;
+	ft_bzero(info->arrows, 2);
+	ft_bzero(info->colors, 3);
 }

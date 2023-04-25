@@ -6,7 +6,7 @@
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/22 23:09:11 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/04/23 18:35:10 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/04/25 23:05:21 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@
 # include <math.h>
 # define WIDTH 512
 # define HEIGHT 512
-# define ITER 300
+# define ITER 60
 
 typedef struct s_info
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
+	int			iter;
 	double		width;
 	double		height;
 	double		xpos;
@@ -49,7 +50,18 @@ typedef struct Complex
 t_complex	comp_sum(t_complex z1, t_complex z2);
 t_complex	comp_mul(t_complex z1, t_complex z2);
 t_complex	count(t_complex z1, t_complex z2);
+
+void	new_info(t_info *info, mlx_t *mlx, mlx_image_t *img, char id);
+void	mouse_pos(double xpos, double ypos, void *info);
+void	scroll_pos(double xdelta, double ydelta, void *info);
+void	colors_check(t_info *info);
+void	arrows_check(t_info *info);
+void	image(double k, mlx_image_t *img, t_info *info);
+
 bool	check(t_complex z1);
-int	get_rgb(char r, char g, char b);
+
+int		get_rgb(char r, char g, char b);
+
+double	absolut(double num);
 
 #endif

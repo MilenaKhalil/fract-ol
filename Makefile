@@ -6,14 +6,16 @@
 #    By: mikhalil <marvin@codam.nl>                   +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/11/12 17:15:07 by mikhalil      #+#    #+#                  #
-#    Updated: 2023/04/22 23:37:58 by mikhalil      ########   odam.nl          #
+#    Updated: 2023/04/25 23:04:54 by mikhalil      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # gcc -Ofast main4.c MLX42/libmlx42.a -o fractol -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./fractol
 
 SRC =	main.c \
-		complex.c
+		complex.c \
+		utils.c \
+		param.c
 
 MLX = MLX42/libmlx42.a
 
