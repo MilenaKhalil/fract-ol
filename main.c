@@ -12,99 +12,7 @@
 
 #include "fractol.h"
 
-void	lyap(t_info *info, double k)
-{
-	double	r0;
-	double	r1;
-	double	lia;
-	double	x0;
-	double	x1;
-
-	for (double x = 0; x < info->width; x++)
-	{
-		for(double y = 0; y < info->height; y++)
-		{
-			r0 = 4 * x / info->width / k + (info->arrows)[0];                            //(4 * (x - info->xpos) / (info->width)) / k - info->xx;
-			r1 = (4 - 4 * y / info->height) / k - (info->arrows)[1];                           //(4 * (y - info->ypos) / (info->width)) / k - info->yy;
-			x0 = 0.7;
-			lia = 0;
-			for (int i = 0; i < info->iter; i++)                                       // think about number of iterations
-			{
-				if (i % 2 == 0)
-				{
-					if (x0 != 0.5)
-						lia += log(absolut(r0 * (1 - (2 * x0))));
-					x1 = r0 * x0 * (1 - x0);
-				}
-				else
-				{
-					lia += log(absolut(r1 * (1 - (2 * x1))));
-					x0 = r1 * x1 * (1 - x1);
-				}
-			}
-			//lia /= 10;
-			//printf("lia = %f\n", lia);
-			mlx_put_pixel(info->image, x, y, get_rgb(
-						(int)(lia + (info->colors)[0]) % 0xFF,
-						(int)(lia + (info->colors)[1]) % 0xFF,
-						(int)(lia + (info->colors)[2]) % 0xFF));
-		}
-	}
-}
-
-void	image(double k, mlx_image_t *img, t_info *info)
-{	
-	t_complex	z1;
-	t_complex	z2;
-	char		col_iter;
-
-	if (info->fractal == 'L')
-	{
-		lyap(info, k);
-		return ;
-	}
-	for (double x = 0; x < img->width; x++)
-	{
-		for(double y = 0; y < img->height; y++)
-		{
-			double t = 0;
-			z1.real = (4 * (x - info->xpos) / (info->width)) / k + (info->arrows)[0] - info->xx;
-			z1.imag = (4 * (y - info->ypos) / (info->width)) / k + (info->arrows)[1] - info->yy;
-			if (info->fractal == 'M')
-				z2 = z1;
-			else if (info->fractal == 'J')
-			{
-				z2.real = (info->arrows)[0] - info->xx;
-				z2.imag = (info->arrows)[1] - info->yy;
-			}
-			//z2.real = -0.79;
-			//z2.imag = 0.15;
-			for (int j = 0; j < info->iter; j++)
-			{
-				t = j;
-				z1 = count(z1, z2);
-				if (!check(z1))
-					break;
-				if (info->fractal == 'J' && j == ITER / 3)
-					break;
-			}
-			if (check(z1))
-				mlx_put_pixel(img, x, y, get_rgb(0, 0, 0));
-			else
-			{
-				col_iter = (int)(sin(t / ITER * M_PI) * 0xFF);
-				mlx_put_pixel(img, x, y, get_rgb(
-						(int)(col_iter + (info->colors)[0]) % 0xFF,
-						(int)(col_iter + (info->colors)[1]) % 0xFF,
-						(int)(col_iter + (info->colors)[2]) % 0xFF));
-			}
-			// if (z1.real == 0 && z1.imag == 0)
-			// 	mlx_put_pixel(img, x, y, get_rgb(0xFF, 0xFF, 0xFF));
-		}
-	}
-}
-
-void	hook(void *param)                                                   // think of resize later
+void	hook(void *param)
 {
 	t_info	*info;
 
@@ -120,29 +28,43 @@ void	hook(void *param)                                                   // thin
 	}
 	if (info->width != info->mlx->width || info->height != info->mlx->height)
 	{
-		info->xx /= info->width;
-		//(info->arrows)[0] /= info->width;
-		info->yy /= info->height;
-		//(info->arrows)[1] /= info->height;
+        info->xpos /= info->width;
 		info->width = (double)info->mlx->width;
-		info->xx *= info->width;
-		//(info->arrows)[0] *= info->width;
+        info->xpos *= info->width;
+        info->ypos /= info->height;
 		info->height = (double)info->mlx->height;
-		info->yy *= info->height;
-		//(info->arrows)[1] *= info->height;
+        info->ypos *= info->height;
 		mlx_resize_image(info->image, info->width, info->height);
 		image(info->k, info->image, info);
 	}
 }
 
-bool	input_check(mlx_t *mlx, int argc, char **argv)
+bool	input_check(mlx_t *mlx, int argc, char **argv, t_info *info)
 {
-	if (argc == 1)                                                       // no arg
-		return (write(1, "L, M, J", 7));
-	if (argv[1][0] == 'M' && argv[1][0] == 0 && argc == 2)               // mandelbrot
+    unsigned long i;
+
+    i = 0;
+    if (!mlx)
+        return (1);
+	if (argc == 1)
+		return (write(1, "L, M, J\n", 8));
+	if (!strncmp(argv[1], "M", strlen(argv[1])) && argc == 2)
 		return (0);
-	return (!mlx || argv[1][1] != 0 ||
-		(argv[1][0] != 'M' && argv[1][0] != 'J' && argv[1][0] != 'L'));
+    if (!strncmp(argv[1], "L", strlen(argv[1])) && argc == 3)
+    {
+        while(i < strlen(argv[2]))
+        {
+            if (argv[2][i] != 'A' && argv[2][i] != 'B')
+                return (1);
+            i++;
+        }
+        return (0);
+    }
+    if (!strncmp(argv[1], "J", strlen(argv[1])) && argc == 4)
+    {
+        return (get_num(argv, info));
+    }
+	return (1);
 }
 
 int32_t	main(int argc, char **argv)
@@ -152,10 +74,10 @@ int32_t	main(int argc, char **argv)
 	mlx_image_t	*img;
 
 	mlx = mlx_init(WIDTH, HEIGHT, "FRACTOL", true);
-	if (input_check(mlx, argc, argv))
+	if (input_check(mlx, argc, argv, &info))
 		exit(EXIT_FAILURE);
 	img = mlx_new_image(mlx, WIDTH, HEIGHT);
-	new_info(&info, mlx, img, argv[1][0]);
+	new_info(&info, mlx, img, argv);
 	mlx_image_to_window(mlx, img, 0, 0);
 	image(info.k, info.image, &info);
 	mlx_cursor_hook(mlx, &mouse_pos, &info);

@@ -22,24 +22,7 @@
 # include <math.h>
 # define WIDTH 512
 # define HEIGHT 512
-# define ITER 60
-
-typedef struct s_info
-{
-	mlx_t		*mlx;
-	mlx_image_t	*image;
-	int			iter;
-	double		width;
-	double		height;
-	double		xpos;
-	double		xx;
-	double		yy;
-	double		ypos;
-	double		k;
-	double		arrows[2];
-	char		colors[3];
-	char		fractal;
-}	t_info;
+# define ITER 200
 
 typedef struct Complex
 {
@@ -47,18 +30,41 @@ typedef struct Complex
 	double	imag;
 }	t_complex;
 
+typedef struct s_info
+{
+	mlx_t		*mlx;
+	mlx_image_t	*image;
+	int	    	iter;
+	double      width;
+	double      height;
+	double		xpos;
+	double    	xx;
+	double	    yy;
+	double      ypos;
+	double		k;
+	double      arrows[2];
+	char	    colors[3];
+	char        fractal;
+    char        *liap;
+    double      jr;
+    double      ji;
+}	t_info;
+
 t_complex	comp_sum(t_complex z1, t_complex z2);
 t_complex	comp_mul(t_complex z1, t_complex z2);
 t_complex	count(t_complex z1, t_complex z2);
 
-void	new_info(t_info *info, mlx_t *mlx, mlx_image_t *img, char id);
+void	new_info(t_info *info, mlx_t *mlx, mlx_image_t *img, char **argv);
 void	mouse_pos(double xpos, double ypos, void *info);
 void	scroll_pos(double xdelta, double ydelta, void *info);
 void	colors_check(t_info *info);
 void	arrows_check(t_info *info);
 void	image(double k, mlx_image_t *img, t_info *info);
+void    color_pixel(t_info *info, double x, double y, double mul);
+void	image(double k, mlx_image_t *img, t_info *info);
 
 bool	check(t_complex z1);
+bool    get_num(char **argv, t_info *info);
 
 int		get_rgb(char r, char g, char b);
 

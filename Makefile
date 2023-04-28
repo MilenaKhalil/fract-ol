@@ -15,7 +15,8 @@
 SRC =	main.c \
 		complex.c \
 		utils.c \
-		param.c
+		param.c \
+		draw.c
 
 MLX = MLX42/libmlx42.a
 
@@ -38,7 +39,7 @@ $(MLX):
 	$(MAKE) -C MLX42
 	
 $(NAME): $(OBJ) $(LIBFT) $(MLX)
-	$(CC) $(CFLAGS) $^ -o $@ -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit
+	$(CC) $(CFLAGS) $^ -o $@ -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 %.o: %.c fractol.h
 	$(CC) $(CFLAGS) -c -o $@ $<
