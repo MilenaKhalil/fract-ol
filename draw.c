@@ -118,9 +118,9 @@ void	image(double k, mlx_image_t *img, t_info *info)
         y = 0;
 		while (y < img->height)
 		{
-			z1.real = (4 * (x - info->xpos) / (info->width)) / k
+			z1.real = (4 * (x * x - (info->xpos * info->xpos)) / (info->width)) / k
                 + (info->arrows)[0] - info->xx;
-			z1.imag = (4 * (y - info->ypos) / (info->width)) / k
+			z1.imag = (4 * (y * y - (info->ypos * info->ypos)) / (info->width)) / k
                 + (info->arrows)[1] - info->yy;
             draw_imag(z1, info, x, y);
             y++;
