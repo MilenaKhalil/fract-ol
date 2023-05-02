@@ -6,11 +6,9 @@
 #    By: mikhalil <marvin@codam.nl>                   +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/11/12 17:15:07 by mikhalil      #+#    #+#                  #
-#    Updated: 2023/04/25 23:04:54 by mikhalil      ########   odam.nl          #
+#    Updated: 2023/05/02 17:25:10 by mikhalil      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
-
-# gcc -Ofast main4.c MLX42/libmlx42.a -o fractol -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit && ./fractol
 
 SRC =	main.c \
 		complex.c \
@@ -30,6 +28,8 @@ NAME = fractol
 
 INCLUDE = -I ./
 
+CC = cc
+
 all: $(NAME)
 
 $(LIBFT):
@@ -39,7 +39,7 @@ $(MLX):
 	$(MAKE) -C MLX42
 	
 $(NAME): $(OBJ) $(LIBFT) $(MLX)
-	$(CC) $(CFLAGS) $^ -o $@ -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+	$(CC) $(CFLAGS) $^ -o $@ -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit
 
 %.o: %.c fractol.h
 	$(CC) $(CFLAGS) -c -o $@ $<

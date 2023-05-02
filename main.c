@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*	                                                                        */
 /*                                                        ::::::::            */
 /*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/22 23:09:01 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/04/25 23:28:29 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/05/02 16:41:19 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	hook(void *param)
 	}
 	if (info->width != info->mlx->width || info->height != info->mlx->height)
 	{
-        info->xpos /= info->width;
+		info->xpos /= info->width;
 		info->width = (double)info->mlx->width;
-        info->xpos *= info->width;
-        info->ypos /= info->height;
+		info->xpos *= info->width;
+		info->ypos /= info->height;
 		info->height = (double)info->mlx->height;
-        info->ypos *= info->height;
+		info->ypos *= info->height;
 		mlx_resize_image(info->image, info->width, info->height);
 		image(info->k, info->image, info);
 	}
@@ -41,29 +41,28 @@ void	hook(void *param)
 
 bool	input_check(mlx_t *mlx, int argc, char **argv, t_info *info)
 {
-    unsigned long i;
+	unsigned long	i;
 
-    i = 0;
-    if (!mlx)
-        return (1);
+	i = 0;
+	if (!mlx)
+		return (1);
 	if (argc == 1)
 		return (write(1, "L, M, J\n", 8));
-	if (!strncmp(argv[1], "M", strlen(argv[1])) && argc == 2)
+	if (!ft_strncmp(argv[1], "M", ft_strlen(argv[1])) && argc == 2)
 		return (0);
-    if (!strncmp(argv[1], "L", strlen(argv[1])) && argc == 3)
-    {
-        while(i < strlen(argv[2]))
-        {
-            if (argv[2][i] != 'A' && argv[2][i] != 'B')
-                return (1);
-            i++;
-        }
-        return (0);
-    }
-    if (!strncmp(argv[1], "J", strlen(argv[1])) && argc == 4)
-    {
-        return (get_num(argv, info));
-    }
+	if (!ft_strncmp(argv[1], "L", ft_strlen(argv[1])) && argc == 3
+		&& argv[2][0] != 0)
+	{
+		while (i < ft_strlen(argv[2]))
+		{
+			if (argv[2][i] != 'A' && argv[2][i] != 'B')
+				return (1);
+			i++;
+		}
+		return (0);
+	}
+	if (!ft_strncmp(argv[1], "J", ft_strlen(argv[1])) && argc == 4)
+		return (get_num(argv, info));
 	return (1);
 }
 

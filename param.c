@@ -6,7 +6,7 @@
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/22 23:09:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/04/25 22:57:48 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/05/02 19:54:07 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ void	mouse_pos(double xpos, double ypos, void *info)
 	if ((xpos != inf->xpos) || (ypos != inf->ypos))
 	{
 		inf->xx += 4 * (inf->xpos - xpos) / inf->k / inf->width;
-		inf->yy += (4 * (inf->ypos - ypos) / inf->k / inf->width)
-			* (inf->height / inf->width);
+		inf->yy += 4 * (inf->ypos - ypos) / inf->k / inf->width;
 		inf->xpos = xpos;
 		inf->ypos = ypos;
 		if (inf->fractal == 'J')
