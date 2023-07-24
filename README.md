@@ -1,7 +1,7 @@
 # fract-ol
 Representation of the Mandelbroot, Julia and Lyapunov fractals. Using MLX library and C.
 
-# Description
+# What the programm can do?
 
 Spesify the fractal you want by the first capital letter (M, J or L).
 
