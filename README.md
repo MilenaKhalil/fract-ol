@@ -3,16 +3,22 @@ Representation of the Mandelbroot, Julia and Lyapunov fractals. Using MLX librar
 
 First download the repo and enter it:
 
+```console
 git clone https://github.com/MilenaKhalil/fract-ol fract-ol
 cd fract-ol
+```
 
 Make the project:
 
+```console
 make
+```
 
 The executable "fractol" should apear. Run it with one of 3 letters (depending on the fractal you want)
 
+```console
 ./fractol J -0.79 0.15
+```
 
 This will create the folowing fractal:
 
