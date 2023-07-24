@@ -1,28 +1,26 @@
-# fract-ol
-Representation of the Mandelbroot, Julia and Lyapunov fractals. Using MLX library and C.
 
-# Description
+# fract-ol
+Colorful representation of the Mandelbroot, Julia and Lyapunov fractals. Using MLX library and C.
+
+## Description
 
 Here are the features of the program and the instractions you can give to it:
 
+* Spesify the fractal you want by the first capital letter (M, J or L).
 
-Spesify the fractal you want by the first capital letter (M, J or L).
+* Pass no parametrs to the Mandelbroot, two numbers from -2 to 2 for different Julia sets and finally a string of capital "A"s and "B"s for the Lyapunov fractal.
 
-Pass no parametrs to the Mandelbroot, two numbers from -2 to 2 for different Julia sets and finally a string of capital "A"s and "B"s for the Lyapunov fractal.
+* Scroll with your mouse or treckpad for zooming in and out. It will zoom to the current mouse position.
 
-Scroll with your mouse or treckpad for zooming in and out. It will zoom to the current mouse position.
+* Resize the image if needed.
 
-You can also resize the image.
+* Use the arrow keys for moving the fractal image up & down or left & right.
 
-Use the arrow keys for moving the fractal image up & down or left & right.
+* Use the keys "R", "G", "B" for the dynamic colorshifts.
 
-Use the keys "R", "G", "B" for the dynamic colorshifts.
+* Read more about this fractals. The math behind it is very interesting!
 
-Red more about this fractals. The math behind it is very interesting!
-
-NOTE! The program will work faster for the smaller window. Also, the deepness for the fractals is limited due to the presition of doubles. Also the deeper slides requir more computation and processing. Lyaponov fractal needs much more computation.
-
-# Building the project
+## Building the project
 
 First download the repo and enter it:
 
@@ -37,9 +35,15 @@ Make the project:
 make
 ```
 
-NOTE! If you have this issue with compiling: "library not found for -lglfw3", first make sure that this library is installed on your PC, run:
+> NOTE! If you have this issue with compiling: "library not found for -lglfw3", first make sure that the library glfw is installed on your PC, run:
 
-If it still doesn't work after installation (or if it was already installed) excess the Makefile (through vim, nvim, vscode or something else what you prefer):
+```console
+brew install glfw
+```
+
+If you don't have brew first install it, it's an extremely usefull tool. Install brew [here](https://docs.brew.sh/Installation). And run the line above again.
+
+If it still doesn't work after the installation (or if it was already installed) excess the Makefile (through vim, nvim, vscode or something else what you prefer):
 
 ```console
 nvim Makefile
@@ -49,19 +53,23 @@ Go to the line №42:
 ```makefile
 $(CC) $(CFLAGS) $^ -o $@ -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit
 ```
-And then remove '3' from the library name "-lglfw3", should be "-lglfw":
+
+And then remove _3_ in the end of the flag _-lglfw3_. It should look like this _-lglfw_. And the line itself should be:
 
 ```makefile
 $(CC) $(CFLAGS) $^ -o $@ -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 ```
 
-Go to the line
+Run `make` again.
 
 The executable "fractol" should apear. Run it with one of 3 letters (depending on the fractal you want)
 
 ```console
 ./fractol J -0.79 0.15
 ```
+
+> NOTE! The program will work faster for the smaller window. Also, the deepness for the fractals is limited due to the presition of doubles. Also the > deeper slides requir more computation and processing. Lyaponov fractal needs much more computation.
+
 
 This will create the folowing fractal:
 
